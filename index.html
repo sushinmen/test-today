@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homunculus | 이토록 기괴한 자아의 목격</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- CRT Visual effects & scanlines -->
+    <div class="crt-overlay"></div>
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation Header -->
+    <header>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-circle-radiation"></i>
+            <span>HOMUNCULUS</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#concept">Concept</a></li>
+            <li><a href="#characters">Characters</a></li>
+            <li><a href="#themes">Themes</a></li>
+            <li><a href="#volumes">Volumes</a></li>
+        </ul>
+        <div class="controls-container">
+            <button class="mode-toggle-btn" id="audio-toggle-btn">
+                <i class="fa-solid fa-volume-xmark"></i> Sound OFF
+            </button>
+            <button class="mode-toggle-btn" id="global-mode-btn" onclick="toggleGlobalMode()">
+                <i class="fa-solid fa-skull"></i> Trepanation
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero / Title Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <span class="hero-subtitle">A Psychological Masterpiece by Hideo Yamamoto</span>
+            <h1 class="glitch-title" id="main-title">HOMUNCULUS</h1>
+            <p class="hero-desc">
+                잃어버린 자아를 찾기 위한 단 한 번의 위험한 제안. 두개골에 3mm의 구멍을 뚫는 천공술(Trepanation) 이후, 내 왼쪽 눈은 사람의 숨겨진 무의식이 형상화된 괴물—'호문쿨루스'를 보기 시작했다.
+            </p>
+            <div class="hero-btns">
+                <button class="btn-primary" onclick="triggerDrill()">
+                    <i class="fa-solid fa-screwdriver"></i> Drill Skull (3mm)
+                </button>
+                <a href="#concept" class="btn-secondary">Explore Concept</a>
+            </div>
+        </div>
+
+        <div class="hero-interactive">
+            <div class="head-visual-container">
+                <!-- Custom SVG illustration of a human head side-profile -->
+                <div class="nakoshi-svg-container">
+                    <svg class="main-head-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Head contour -->
+                        <path d="M 50,15 
+                                 C 35,15 25,25 25,40 
+                                 C 25,43 27,50 24,53 
+                                 C 21,56 18,59 19,63 
+                                 C 20,67 24,67 25,69 
+                                 C 26,71 25,75 28,78 
+                                 C 32,82 40,84 50,84 
+                                 C 62,84 75,76 75,55 
+                                 C 75,30 68,15 50,15 Z" />
+                        <!-- Brain path decorative lines -->
+                        <path d="M 50,22 C 40,25 35,35 38,45" stroke-dasharray="2,2" opacity="0.5" />
+                        <path d="M 55,20 C 65,25 68,38 65,48" stroke-dasharray="2,2" opacity="0.5" />
+                        <path d="M 45,78 C 48,70 55,70 58,78" opacity="0.3" />
+                        <!-- Neck connection -->
+                        <path d="M 33,81 C 32,88 30,92 30,95" />
+                        <path d="M 65,80 C 68,88 72,92 75,95" />
+                    </svg>
+
+                    <!-- Interactive Eye Target (Placed on Nakoshi's Left Eye region) -->
+                    <div class="interactive-eye">
+                        <div class="iris"></div>
+                    </div>
+
+                    <!-- Trepanation Target Spot -->
+                    <div class="drill-spot" onclick="triggerDrill()" title="Drill here (3mm)"></div>
+
+                    <!-- Loader ring during drilling -->
+                    <div class="drill-animation-overlay"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Concept / Story Synopsis -->
+    <section class="section" id="concept">
+        <div class="section-header">
+            <span class="section-subtitle">The Medical Experiment</span>
+            <h2 class="section-title">The Premise</h2>
+        </div>
+        <div class="concept-grid">
+            <div class="concept-text">
+                <p>
+                    일류 은행원 출신이지만 현재는 홈리스 공원 옆 자신의 소형 차 안에서 생활하고 있는 주인공 <strong>나코시 스스무</strong>. 그는 명품 브랜드를 걸치고 최고급 호텔을 가지만, 동시에 홈리스들과 급식을 나누어 먹는 극단적인 이중생활을 이어갑니다. 
+                </p>
+                <p>
+                    그러던 어느 날, 기괴한 복장을 한 의대생 <strong>이토 마나부</strong>가 그에게 다가와 700,000엔을 대가로 인간의 잠재된 '제6감'을 깨우는 수술인 <strong>'두개골 천공술(Trepanation)'</strong>을 제안합니다. 돈이 절박했던 나코시는 제안을 수락하고 머리에 구멍을 뚫게 됩니다.
+                </p>
+                <p>
+                    수술 직후, 나코시가 <strong>오른쪽 눈을 가리고 왼쪽 눈으로만 세상을 볼 때</strong>, 타인의 마음속 깊은 결핍과 트라우마가 외형으로 비틀려 발현된 심리적 괴물인 <strong>'호문쿨루스(Homunculus)'</strong>를 볼 수 있게 됩니다.
+                </p>
+            </div>
+            <div class="concept-visual">
+                <div class="scanner-container">
+                    <!-- Scanner background graphic representing a medical brain scan/X-ray -->
+                    <svg class="scanner-image" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="100" height="100" fill="#000" />
+                        <circle cx="50" cy="50" r="38" stroke="#333" stroke-width="1" fill="none" />
+                        <circle cx="50" cy="50" r="28" stroke="#222" stroke-width="0.5" fill="none" />
+                        <!-- Brain lobes representation -->
+                        <path d="M 50,15 C 30,15 20,30 20,50 C 20,70 30,85 50,85 C 70,85 80,70 80,50 C 80,30 70,15 50,15 Z" fill="none" stroke="#444" stroke-width="1.5" />
+                        <path d="M 50,15 L 50,85" stroke="#333" stroke-width="1" stroke-dasharray="3,3" />
+                        <path d="M 20,50 L 80,50" stroke="#333" stroke-width="1" stroke-dasharray="3,3" />
+                        <!-- Neon signal path inside brain -->
+                        <path d="M 50,25 C 42,32 40,45 46,55 C 48,58 45,63 42,66" fill="none" stroke="var(--accent)" stroke-width="2" style="transition: var(--transition-smooth); opacity: 0.8;" />
+                        <circle cx="42" cy="66" r="3" fill="var(--accent)" style="transition: var(--transition-smooth);" />
+                    </svg>
+                    <div class="scanner-line"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Characters Section -->
+    <section class="section" id="characters">
+        <div class="section-header">
+            <span class="section-subtitle">Cast & Visualizations</span>
+            <h2 class="section-title">The Observers & The Distorted</h2>
+        </div>
+        <div class="character-grid">
+            <!-- Nakoshi -->
+            <div class="char-card" data-character="nakoshi">
+                <div class="char-img-wrap">
+                    <!-- Custom SVG representation for character profile image -->
+                    <svg viewBox="0 0 100 100" class="char-img">
+                        <rect width="100" height="100" fill="#222" />
+                        <!-- Nakoshi public face outline -->
+                        <path d="M 50,20 C 40,20 32,28 32,45 C 32,60 38,72 50,75 C 62,72 68,60 68,45 C 68,28 60,20 50,20 Z" fill="none" stroke="#888" stroke-width="1.5" />
+                        <path d="M 38,42 Q 44,45 50,42 Q 56,45 62,42" fill="none" stroke="#888" stroke-width="1" />
+                        <path d="M 45,60 Q 50,65 55,60" fill="none" stroke="#888" stroke-width="1.5" />
+                    </svg>
+                    <div class="homunculus-overlay-visual">
+                        <!-- Nakoshi's Homunculus: A pure reflecting mirror -->
+                        <svg viewBox="0 0 100 100" class="homunculus-svg">
+                            <rect x="35" y="20" width="30" height="55" rx="15" fill="none" stroke="var(--neon-red)" stroke-width="2" />
+                            <path d="M 40,28 L 60,48" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <path d="M 40,43 L 55,58" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <path d="M 40,58 L 48,66" stroke="var(--neon-red)" stroke-width="1.5" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="char-info">
+                    <span class="char-role">The Protagonist</span>
+                    <h3 class="char-name">Susumu Nakoshi</h3>
+                    <p class="char-desc">과거의 기억을 지우고 껍데기뿐인 허상 속에서 방황하는 전직 은행원. 천공술 이후 사람들의 내면 속 결핍을 투시하게 됩니다.</p>
+                    <div class="char-traits">
+                        <span class="trait-tag public-trait-tag">홈리스</span>
+                        <span class="trait-tag public-trait-tag">수수께끼의 30대</span>
+                        <span class="trait-tag public-trait-tag">허영심</span>
+                        <span class="trait-tag homunculus-trait-tag">거울의 존재</span>
+                        <span class="trait-tag homunculus-trait-tag">자아의 상실</span>
+                        <span class="trait-tag homunculus-trait-tag">투영의 구멍</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ito -->
+            <div class="char-card" data-character="ito">
+                <div class="char-img-wrap">
+                    <svg viewBox="0 0 100 100" class="char-img">
+                        <rect width="100" height="100" fill="#222" />
+                        <!-- Ito public appearance outline -->
+                        <path d="M 50,20 C 38,20 35,28 35,45 C 35,55 38,70 50,75 C 62,70 65,55 65,45 C 65,28 62,20 50,20 Z" fill="none" stroke="#888" stroke-width="1.5" />
+                        <!-- Glasses outline -->
+                        <circle cx="43" cy="42" r="7" fill="none" stroke="#888" stroke-width="1.2" />
+                        <circle cx="57" cy="42" r="7" fill="none" stroke="#888" stroke-width="1.2" />
+                        <line x1="50" y1="42" x2="50" y2="42" stroke="#888" stroke-width="1.2" />
+                    </svg>
+                    <div class="homunculus-overlay-visual">
+                        <!-- Ito's Homunculus: Transparent glass fishbowl -->
+                        <svg viewBox="0 0 100 100" class="homunculus-svg">
+                            <!-- Fishbowl -->
+                            <circle cx="50" cy="48" r="28" fill="none" stroke="var(--neon-red)" stroke-width="2" />
+                            <ellipse cx="50" cy="22" rx="14" ry="4" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <!-- Floating fish -->
+                            <path d="M 42,42 Q 50,38 58,42 L 58,46 Z" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <path d="M 38,54 Q 45,50 52,54 L 52,58 Z" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="char-info">
+                    <span class="char-role">The Experimenter</span>
+                    <h3 class="char-name">Manabu Ito</h3>
+                    <p class="char-desc">두개골 천공술을 계획하고 나코시에게 수술을 시술한 미스터리한 종합병원 원장의 외아들이자 의학도.</p>
+                    <div class="char-traits">
+                        <span class="trait-tag public-trait-tag">의대생</span>
+                        <span class="trait-tag public-trait-tag">병원장 아들</span>
+                        <span class="trait-tag public-trait-tag">자해 습관</span>
+                        <span class="trait-tag homunculus-trait-tag">투명한 유리</span>
+                        <span class="trait-tag homunculus-trait-tag">어항 속의 물고기</span>
+                        <span class="trait-tag homunculus-trait-tag">부성 콤플렉스</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sand Girl -->
+            <div class="char-card" data-character="sandgirl">
+                <div class="char-img-wrap">
+                    <svg viewBox="0 0 100 100" class="char-img">
+                        <rect width="100" height="100" fill="#222" />
+                        <!-- School girl public face -->
+                        <path d="M 50,22 C 40,22 35,28 35,48 C 35,62 38,70 50,72 C 62,70 65,62 65,48 C 65,28 60,22 50,22 Z" fill="none" stroke="#888" stroke-width="1.5" />
+                        <path d="M 35,28 Q 50,35 65,28" stroke="#888" stroke-width="1.2" fill="none" />
+                    </svg>
+                    <div class="homunculus-overlay-visual">
+                        <!-- Sand Girl's Homunculus: Shifting granular body of sand and shells -->
+                        <svg viewBox="0 0 100 100" class="homunculus-svg">
+                            <path d="M 35,25 C 25,35 30,55 35,70 C 40,75 60,75 65,70 C 70,55 75,35 65,25 Z" stroke="var(--neon-red)" stroke-width="1.5" stroke-dasharray="1,3" fill="none" />
+                            <!-- Shell structures -->
+                            <circle cx="50" cy="40" r="5" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <circle cx="42" cy="55" r="4" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <circle cx="58" cy="55" r="4" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="char-info">
+                    <span class="char-role">The Victim</span>
+                    <h3 class="char-name">The Sand Girl</h3>
+                    <p class="char-desc">나코시가 시내에서 마주친 최초의 호문쿨루스. 어머니의 압박과 억압된 성적 트라우마를 안고 있는 여고생.</p>
+                    <div class="char-traits">
+                        <span class="trait-tag public-trait-tag">여고생</span>
+                        <span class="trait-tag public-trait-tag">원조교제 의혹</span>
+                        <span class="trait-tag public-trait-tag">비행 청소년</span>
+                        <span class="trait-tag homunculus-trait-tag">무너지는 모래</span>
+                        <span class="trait-tag homunculus-trait-tag">조개껍데기</span>
+                        <span class="trait-tag homunculus-trait-tag">억압된 성</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yakuza -->
+            <div class="char-card" data-character="yakuza">
+                <div class="char-img-wrap">
+                    <svg viewBox="0 0 100 100" class="char-img">
+                        <rect width="100" height="100" fill="#222" />
+                        <!-- Yakuza boss face -->
+                        <path d="M 50,18 C 38,18 30,25 30,45 C 30,62 38,72 50,75 C 62,72 70,62 70,45 C 70,25 62,18 50,18 Z" fill="none" stroke="#888" stroke-width="1.5" />
+                        <line x1="33" y1="40" x2="43" y2="40" stroke="#888" stroke-width="2" />
+                        <line x1="57" y1="40" x2="67" y2="40" stroke="#888" stroke-width="2" />
+                        <path d="M 40,62 Q 50,55 60,62" stroke="#888" stroke-width="1.5" fill="none" />
+                    </svg>
+                    <div class="homunculus-overlay-visual">
+                        <!-- Yakuza Homunculus: Mechanical robotic chassis containing a crying boy -->
+                        <svg viewBox="0 0 100 100" class="homunculus-svg">
+                            <!-- Mechanical armor -->
+                            <rect x="25" y="25" width="50" height="50" rx="5" fill="none" stroke="var(--neon-red)" stroke-width="2" />
+                            <line x1="25" y1="50" x2="75" y2="50" stroke="var(--neon-red)" stroke-width="1" />
+                            <line x1="50" y1="25" x2="50" y2="75" stroke="var(--neon-red)" stroke-width="1" />
+                            <!-- Tiny boy representation inside -->
+                            <circle cx="50" cy="38" r="6" fill="none" stroke="var(--neon-red)" stroke-width="1.5" />
+                            <path d="M 45,58 L 50,44 L 55,58" stroke="var(--neon-red)" stroke-width="1.5" fill="none" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="char-info">
+                    <span class="char-role">The Underworld Boss</span>
+                    <h3 class="char-name">Yakuza Commander</h3>
+                    <p class="char-desc">겉으로는 강인하고 잔혹한 야쿠자 간부이나, 내부에는 어린 시절 친구에게 가한 미안함과 공포가 상처로 남아 있는 인물.</p>
+                    <div class="char-traits">
+                        <span class="trait-tag public-trait-tag">폭력배 두목</span>
+                        <span class="trait-tag public-trait-tag">문신</span>
+                        <span class="trait-tag public-trait-tag">경호원 대동</span>
+                        <span class="trait-tag homunculus-trait-tag">철갑 슈트 로봇</span>
+                        <span class="trait-tag homunculus-trait-tag">울고 있는 꼬마</span>
+                        <span class="trait-tag homunculus-trait-tag">단지(커터칼) 공포</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theme Breakdown Section -->
+    <section class="section" id="themes">
+        <div class="section-header">
+            <span class="section-subtitle">Deep Psychoanalysis</span>
+            <h2 class="section-title">Thematic Breakdown</h2>
+        </div>
+        <div class="theme-container">
+            <div class="theme-tabs">
+                <button class="theme-tab-btn active" data-theme="trepanation">천공술 (Trepanation)</button>
+                <button class="theme-tab-btn" data-theme="homunculi">에고와 무의식 (Ego Projection)</button>
+                <button class="theme-tab-btn" data-theme="identity">진짜 얼굴 (True Self)</button>
+            </div>
+            
+            <div class="theme-content-panel">
+                <div class="theme-panel-text">
+                    <h3 class="theme-panel-title" id="panel-title">천공술 (Trepanation)</h3>
+                    <p class="theme-panel-body" id="panel-body">
+                        천공술은 역사상 가장 오래된 외과 수술 방식으로, 두개골 표면에 미세한 구멍을 뚫는 시술입니다. 고대에는 두통, 정신적 질환을 치료하거나 뇌 내부의 악령을 내쫓기 위해 사용되었습니다. 작품 내에서 이토 마나부는 나코시에게 뇌 속의 압력을 낮추어 뇌 혈류량을 늘리면, 평소 사용되지 않는 뇌의 잠재적 영역이 열리면서 잠재되어 있던 초감각이나 육감(ESP)이 열리게 될 것이라는 가설을 세우고 이를 증명하고자 합니다.
+                    </p>
+                </div>
+                <div class="theme-panel-visual">
+                    <i class="fa-solid fa-circle-dot" id="panel-icon"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Volume & Chapter Guide Section -->
+    <section class="section" id="volumes">
+        <div class="section-header">
+            <span class="section-subtitle">Manga Library</span>
+            <h2 class="section-title">The Volume Archive</h2>
+        </div>
+        <div class="volumes-container">
+            <!-- Vol 1 -->
+            <div class="volume-card">
+                <div class="volume-cover">
+                    <!-- Vector representation of a manga cover grid pattern -->
+                    <svg viewBox="0 0 100 150" style="width: 100%; height: 100%;">
+                        <rect width="100" height="150" fill="#141416" />
+                        <line x1="10" y1="10" x2="90" y2="10" stroke="#ff0055" stroke-width="2" />
+                        <!-- Volume number -->
+                        <text x="50" y="55" font-family="'Outfit', sans-serif" font-weight="800" font-size="28" fill="#fff" text-anchor="middle">01</text>
+                        <!-- Cover lines -->
+                        <path d="M 20,80 Q 50,110 80,80" stroke="#333" stroke-width="1.5" fill="none" />
+                        <path d="M 30,95 Q 50,120 70,95" stroke="var(--accent)" stroke-width="2" fill="none" style="transition: var(--transition-smooth);" />
+                        <text x="50" y="130" font-family="'Noto Sans KR', sans-serif" font-size="8" fill="#666" text-anchor="middle">TREPANATION BEGINS</text>
+                    </svg>
+                </div>
+                <div class="volume-info">
+                    <div>
+                        <div class="volume-number">Volume 01</div>
+                        <h4 class="volume-title">The Experiment</h4>
+                    </div>
+                    <div class="volume-chapters">Chapters 1 - 7</div>
+                </div>
+            </div>
+
+            <!-- Vol 2 -->
+            <div class="volume-card">
+                <div class="volume-cover">
+                    <svg viewBox="0 0 100 150" style="width: 100%; height: 100%;">
+                        <rect width="100" height="150" fill="#141416" />
+                        <line x1="10" y1="10" x2="90" y2="10" stroke="#ff0055" stroke-width="2" />
+                        <text x="50" y="55" font-family="'Outfit', sans-serif" font-weight="800" font-size="28" fill="#fff" text-anchor="middle">02</text>
+                        <path d="M 30,70 L 70,110 M 70,70 L 30,110" stroke="var(--accent)" stroke-width="2" style="transition: var(--transition-smooth);" />
+                        <text x="50" y="130" font-family="'Noto Sans KR', sans-serif" font-size="8" fill="#666" text-anchor="middle">THE FIRST SIGHT</text>
+                    </svg>
+                </div>
+                <div class="volume-info">
+                    <div>
+                        <div class="volume-number">Volume 02</div>
+                        <h4 class="volume-title">The First Witness</h4>
+                    </div>
+                    <div class="volume-chapters">Chapters 8 - 15</div>
+                </div>
+            </div>
+
+            <!-- Vol 3 -->
+            <div class="volume-card">
+                <div class="volume-cover">
+                    <svg viewBox="0 0 100 150" style="width: 100%; height: 100%;">
+                        <rect width="100" height="150" fill="#141416" />
+                        <line x1="10" y1="10" x2="90" y2="10" stroke="#ff0055" stroke-width="2" />
+                        <text x="50" y="55" font-family="'Outfit', sans-serif" font-weight="800" font-size="28" fill="#fff" text-anchor="middle">03</text>
+                        <!-- Stylized sand grain particles -->
+                        <circle cx="50" cy="90" r="10" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-dasharray="2,3" style="transition: var(--transition-smooth);" />
+                        <text x="50" y="130" font-family="'Noto Sans KR', sans-serif" font-size="8" fill="#666" text-anchor="middle">SAND & GUILT</text>
+                    </svg>
+                </div>
+                <div class="volume-info">
+                    <div>
+                        <div class="volume-number">Volume 03</div>
+                        <h4 class="volume-title">Sand & Guilt</h4>
+                    </div>
+                    <div class="volume-chapters">Chapters 16 - 24</div>
+                </div>
+            </div>
+
+            <!-- Vol 4 -->
+            <div class="volume-card">
+                <div class="volume-cover">
+                    <svg viewBox="0 0 100 150" style="width: 100%; height: 100%;">
+                        <rect width="100" height="150" fill="#141416" />
+                        <line x1="10" y1="10" x2="90" y2="10" stroke="#ff0055" stroke-width="2" />
+                        <text x="50" y="55" font-family="'Outfit', sans-serif" font-weight="800" font-size="28" fill="#fff" text-anchor="middle">04</text>
+                        <!-- Steel grid motif -->
+                        <rect x="35" y="75" width="30" height="30" rx="3" stroke="var(--accent)" stroke-width="1.5" fill="none" style="transition: var(--transition-smooth);" />
+                        <text x="50" y="130" font-family="'Noto Sans KR', sans-serif" font-size="8" fill="#666" text-anchor="middle">THE METAL CHASSIS</text>
+                    </svg>
+                </div>
+                <div class="volume-info">
+                    <div>
+                        <div class="volume-number">Volume 04</div>
+                        <h4 class="volume-title">Iron Armor</h4>
+                    </div>
+                    <div class="volume-chapters">Chapters 25 - 33</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">
+            <i class="fa-solid fa-circle-radiation"></i>
+            <span>HOMUNCULUS</span>
+        </div>
+        <ul class="footer-nav">
+            <li><a href="#concept">Concept</a></li>
+            <li><a href="#characters">Characters</a></li>
+            <li><a href="#themes">Themes</a></li>
+            <li><a href="#volumes">Volumes</a></li>
+        </ul>
+        <p class="footer-disclaimer">
+            Homunculus is a manga created by Hideo Yamamoto, serialized in Shogakukan's Weekly Big Comic Spirits. This is a non-commercial educational project celebrating its psychological themes and storytelling art direction.
+        </p>
+    </footer>
+
+    <!-- Interactive Character Psyche Modal -->
+    <div class="modal-overlay" id="psyche-modal">
+        <div class="modal-card">
+            <div class="modal-close-btn" id="modal-close"><i class="fa-solid fa-xmark"></i></div>
+            
+            <span class="modal-role" id="modal-char-role">Role</span>
+            <h3 class="modal-name" id="modal-char-name">Character Name</h3>
+            <p class="modal-desc" id="modal-char-desc">Description</p>
+            
+            <div class="modal-divider"></div>
+            
+            <!-- Persona Dual States -->
+            <div class="modal-split">
+                <div class="modal-split-half">
+                    <h4 class="modal-subtitle">Public Identity <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(외면적 페르소나)</span></h4>
+                    <div class="modal-tags" id="modal-public-tags">
+                        <!-- tags injected here -->
+                    </div>
+                </div>
+                <div class="modal-split-half">
+                    <h4 class="modal-subtitle" style="color: var(--neon-red);">Homunculus Psyche <span style="font-size: 0.8rem; font-weight: normal; color: rgba(255, 0, 85, 0.5);">(내면의 결핍과 트라우마)</span></h4>
+                    <div class="modal-tags" id="modal-homunculus-tags">
+                        <!-- tags injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-detail-panel">
+                <h4 class="detail-panel-title" id="modal-psyche-title">Psyche Analysis</h4>
+                <p class="detail-panel-body" id="modal-psyche-desc">Detailed analysis body text...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extra Modal CSS Styles to avoid creating extra files -->
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-smooth);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            width: 90%;
+            max-width: 650px;
+            padding: 40px;
+            position: relative;
+            transform: translateY(30px);
+            transition: var(--transition-smooth);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .modal-close-btn:hover {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .modal-role {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .modal-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .modal-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .modal-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .modal-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .modal-subtitle {
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .modal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .modal-detail-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px;
+            transition: var(--transition-smooth);
+        }
+
+        body.homunculus-active .modal-detail-panel {
+            border-color: rgba(255, 0, 85, 0.2);
+            background: rgba(255, 0, 85, 0.02);
+        }
+
+        .detail-panel-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent);
+            text-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        .detail-panel-body {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 648px) {
+            .modal-split {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .modal-card {
+                padding: 30px 20px;
+            }
+            .modal-name {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+
+    <!-- App Engine JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

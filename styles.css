@@ -1,0 +1,958 @@
+/* Homunculus Manga Website Design System */
+
+:root {
+    --bg-dark: #050507;
+    --bg-card: #101014;
+    --border-color: rgba(255, 255, 255, 0.08);
+    
+    /* Neon Colors */
+    --neon-blue: #00f0ff;
+    --neon-green: #39ff14;
+    --neon-red: #ff0055;
+    
+    /* Theme State Colors */
+    --accent: var(--neon-blue);
+    --accent-glow: rgba(0, 240, 255, 0.4);
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    
+    /* Animation Speeds */
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Homunculus Mode Styles - Global State overrides */
+body.homunculus-active {
+    --bg-dark: #0f0505;
+    --bg-card: #1c0b0b;
+    --border-color: rgba(255, 0, 85, 0.15);
+    --accent: var(--neon-red);
+    --accent-glow: rgba(255, 0, 85, 0.5);
+    --text-main: #ffebeb;
+    --text-muted: #bda2a2;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--bg-dark);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 3px;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Outfit', 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+/* CRT Scanline & Distortion Overlay */
+.crt-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+    background-size: 100% 4px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.15;
+    transition: var(--transition-smooth);
+}
+
+body.homunculus-active .crt-overlay {
+    opacity: 0.35;
+    animation: flicker 0.15s infinite;
+}
+
+/* Ambient noise background */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.02;
+    z-index: 9998;
+    pointer-events: none;
+}
+
+body.homunculus-active .noise-overlay {
+    opacity: 0.05;
+}
+
+/* Header & Navigation */
+header {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: rgba(5, 5, 7, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+    transition: var(--transition-smooth);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-main);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo span {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
+    transition: var(--transition-smooth);
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+    position: relative;
+    padding: 5px 0;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    transition: var(--transition-smooth);
+}
+
+.nav-links a:hover {
+    color: var(--text-main);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Mode Indicators & Controllers */
+.controls-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.mode-toggle-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition-smooth);
+}
+
+.mode-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.mode-toggle-btn i {
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    min-height: 90vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8% 0 10%;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 550px;
+    z-index: 10;
+}
+
+.hero-subtitle {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: inline-block;
+    position: relative;
+    text-shadow: 0 0 8px var(--accent-glow);
+}
+
+.glitch-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    position: relative;
+    letter-spacing: -2px;
+}
+
+.hero-desc {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    font-weight: 300;
+}
+
+/* Call to Action Buttons */
+.hero-btns {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition-smooth);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px var(--accent);
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-secondary:hover {
+    border-color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Interactive Skull & Drill (Hero Right Side) */
+.hero-interactive {
+    position: relative;
+    width: 450px;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.head-visual-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Custom interactive skull or Nakoshi portrait SVG */
+.nakoshi-svg-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.main-head-svg {
+    width: 80%;
+    height: 80%;
+    fill: none;
+    stroke: var(--text-main);
+    stroke-width: 1.5;
+    transition: var(--transition-smooth);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+}
+
+body.homunculus-active .main-head-svg {
+    stroke: var(--accent);
+    filter: drop-shadow(0 0 25px var(--accent-glow));
+}
+
+/* Eyeball that tracks the cursor */
+.interactive-eye {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #fff 30%, #ddd 60%, #999 100%);
+    border-radius: 50%;
+    border: 3px solid #000;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Position of Left Eye */
+    left: 45%;
+    top: 38%;
+    transition: border-color var(--transition-smooth);
+    z-index: 20;
+}
+
+body.homunculus-active .interactive-eye {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.iris {
+    width: 25px;
+    height: 25px;
+    background: radial-gradient(circle, #000 40%, var(--accent) 70%, #000 100%);
+    border-radius: 50%;
+    position: absolute;
+    transition: var(--transition-smooth);
+}
+
+/* Drilling Target Point */
+.drill-spot {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 0, 85, 0.2);
+    border: 2px dashed var(--neon-red);
+    left: 58%;
+    top: 25%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 30;
+    animation: pulse 1.5s infinite;
+    transition: var(--transition-smooth);
+}
+
+.drill-spot::before {
+    content: '▲';
+    font-size: 10px;
+    color: var(--neon-red);
+}
+
+.drill-spot:hover {
+    transform: scale(1.2);
+    background: var(--neon-red);
+}
+
+.drill-spot:hover::before {
+    color: #000;
+}
+
+body.homunculus-active .drill-spot {
+    display: none; /* Hide when already trepanated */
+}
+
+/* Trepanation Drill Icon / Loader animation */
+.drill-animation-overlay {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 3px solid transparent;
+    border-top: 3px solid var(--accent);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 40;
+    left: 49%;
+    top: 17%;
+    animation: rotate 0.8s linear infinite;
+}
+
+.drill-animation-overlay::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--accent);
+}
+
+/* Section Common Layouts */
+.section {
+    padding: 100px 8%;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-subtitle {
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px var(--accent-glow);
+}
+
+.section-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Concept / Story Section */
+.concept-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.concept-text {
+    line-height: 1.8;
+}
+
+.concept-text p {
+    margin-bottom: 25px;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+}
+
+.concept-text p strong {
+    color: var(--text-main);
+}
+
+.concept-visual {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    aspect-ratio: 16/10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Scanning effect visual */
+.scanner-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scanner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.2);
+    opacity: 0.7;
+    transition: var(--transition-smooth);
+}
+
+body.homunculus-active .scanner-image {
+    filter: grayscale(1) contrast(1.5) invert(1);
+    opacity: 0.4;
+}
+
+.scanner-line {
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+    left: 0;
+    top: 0;
+    animation: scan 4s linear infinite;
+    z-index: 5;
+}
+
+/* Characters Section */
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+}
+
+.char-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    position: relative;
+    cursor: pointer;
+}
+
+.char-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 15px var(--accent-glow);
+}
+
+.char-img-wrap {
+    width: 100%;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.char-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-smooth);
+    filter: grayscale(1);
+}
+
+.char-card:hover .char-img {
+    filter: grayscale(0);
+    transform: scale(1.05);
+}
+
+/* The Homunculus Overlay layer on character card */
+.homunculus-overlay-visual {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+    background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.homunculus-svg {
+    width: 90%;
+    height: 90%;
+    stroke: var(--neon-red);
+    stroke-width: 1.5;
+    fill: none;
+    filter: drop-shadow(0 0 15px var(--neon-red));
+}
+
+body.homunculus-active .char-card .homunculus-overlay-visual {
+    opacity: 1;
+}
+
+body.homunculus-active .char-card .char-img {
+    filter: grayscale(1) blur(2px) contrast(1.5);
+    opacity: 0.3;
+}
+
+.char-info {
+    padding: 30px;
+    position: relative;
+}
+
+.char-role {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.char-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.char-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+/* Dual state profile values inside cards */
+.char-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.trait-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: var(--transition-smooth);
+}
+
+.char-card:hover .trait-tag {
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+}
+
+/* Psyche Homunculus state tag overlay */
+.homunculus-trait-tag {
+    background: rgba(255, 0, 85, 0.1) !important;
+    border-color: rgba(255, 0, 85, 0.3) !important;
+    color: var(--neon-red) !important;
+    display: none;
+}
+
+body.homunculus-active .homunculus-trait-tag {
+    display: inline-block;
+}
+body.homunculus-active .public-trait-tag {
+    display: none;
+}
+
+/* Themes Breakdown (Tabs/Interactive Grid) */
+.theme-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.theme-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 45px;
+    flex-wrap: wrap;
+}
+
+.theme-tab-btn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+}
+
+.theme-tab-btn:hover, .theme-tab-btn.active {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text-main);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.theme-content-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 45px;
+    min-height: 350px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-panel-text {
+    flex: 1.2;
+}
+
+.theme-panel-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.theme-panel-body {
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.theme-panel-visual {
+    flex: 0.8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.theme-panel-visual i {
+    font-size: 8rem;
+    color: var(--accent);
+    opacity: 0.15;
+    animation: float 5s ease-in-out infinite;
+    text-shadow: 0 0 30px var(--accent-glow);
+}
+
+/* Volume Guide Section */
+.volumes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+.volume-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+}
+
+.volume-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.volume-cover {
+    width: 100%;
+    aspect-ratio: 2/3;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.volume-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.8) contrast(1.1);
+    transition: var(--transition-smooth);
+}
+
+.volume-card:hover .volume-cover img {
+    filter: grayscale(0) contrast(1);
+    transform: scale(1.05);
+}
+
+.volume-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.volume-number {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.volume-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.volume-chapters {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Footer Section */
+footer {
+    width: 100%;
+    padding: 60px 8%;
+    background: #030305;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.footer-logo span {
+    color: var(--accent);
+    text-shadow: 0 0 10px var(--accent-glow);
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    list-style: none;
+}
+
+.footer-nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+}
+
+.footer-nav a:hover {
+    color: var(--accent);
+}
+
+.footer-disclaimer {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #555;
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+/* Animations */
+@keyframes flicker {
+    0% { opacity: 0.32; }
+    50% { opacity: 0.38; }
+    100% { opacity: 0.32; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 0, 85, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 85, 0); }
+}
+
+@keyframes rotate {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes scan {
+    0% { top: 0; }
+    50% { top: 100%; }
+    100% { top: 0; }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 968px) {
+    header {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .hero-section {
+        flex-direction: column-reverse;
+        padding: 100px 5% 50px 5%;
+        text-align: center;
+        min-height: auto;
+        gap: 50px;
+    }
+
+    .hero-btns {
+        justify-content: center;
+    }
+
+    .hero-interactive {
+        width: 320px;
+        height: 320px;
+    }
+
+    .interactive-eye {
+        width: 45px;
+        height: 45px;
+        left: 45%;
+        top: 38%;
+    }
+
+    .iris {
+        width: 18px;
+        height: 18px;
+    }
+
+    .concept-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .theme-content-panel {
+        flex-direction: column;
+        padding: 30px;
+    }
+
+    .theme-panel-visual {
+        margin-top: 30px;
+    }
+}
